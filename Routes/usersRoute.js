@@ -1,11 +1,14 @@
 const express = require('express')
 const router = express.Router()
 const userControllers = require('../Controllers/usersControllers')
-const {validateBodyUserRegister} = require('../Middleware/validateBody.js')
+const {validateBody} = require('../Middleware/validateBody.js')
 const {userRegisterScehma} = require('../Schemas/userRegisterSchema.js')
-const {passwordMatch} = require('../Middleware/passwordMatchUsers.js')
+const {userLoginSchema} = require('../Schemas/userLogInSchema')
+const {passwordMatch,userAlreadyExist,isAnExistingUser} = require('../Middleware/usersMiddleware')
 
 
-router.post('/signup',validateBodyUserRegister(userRegisterScehma),passwordMatch, userControllers.signUpUser)
+
+router.post('/signup',validateBody(userRegisterScehma),userAlreadyExist,passwordMatch, userControllers.signUpUser)
+router.post('/login',validateBody(userLoginSchema), isAnExistingUser,userControllers.logInUser)
 
 module.exports = router

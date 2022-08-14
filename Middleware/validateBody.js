@@ -1,7 +1,7 @@
 const Ajv = require("ajv")
 const ajv = new Ajv()
 
-function validateBodyUserRegister (schema){
+function validateBody (schema){
     return (req,res,next) =>{
         const valid = ajv.validate(schema, req.body)
         if (!valid){
@@ -11,4 +11,4 @@ function validateBodyUserRegister (schema){
         next();
     }
 }
-module.exports = {validateBodyUserRegister}
+module.exports = {validateBody}
