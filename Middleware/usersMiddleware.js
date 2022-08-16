@@ -28,7 +28,7 @@ function isAnExistingUser (req,res,next){
         //req.session.loggedin = true;
         //req.session.email = req.body.email;
         //res.redirect('http://localhost:3000/home')
-        res.send('Logged In')
+        //res.send('Logged In')
         next()
     }else{
         res.status(400).send('Incorrect Email and/or Password!')
