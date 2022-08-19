@@ -4,29 +4,19 @@ const PORT = process.env.PORT || 8080
 const cors = require('cors')
 const usersRoute = require('./Routes/usersRoute')
 require("dotenv").config()
-
-/*const  mysql      = require('mysql');
-const connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'joni94sql'
-});
-connection.connect(function(err) {
-    if (err) {
-      return console.error('error: ' + err.message);
-    }
-  
-    console.log('Connected to the MySQL server.');
-  });*/
-
-
+const dbConnection = require('./Data/knex')
 
 app.use(express.json())
 app.use(cors())
 
 app.use('/users',usersRoute)
 
-
-app.listen(PORT,()=>{
-    console.log('Listening to port: '+PORT)
+dbConnection.migrate.latest().then((migration)=>{
+  if(migration){
+    console.log('Connected to DB: '+migration)
+    app.listen(PORT,()=>{
+      console.log('Listening to port: '+PORT)
+  })
+  }
 })
+

@@ -28,6 +28,6 @@ const {passwordMatch,userAlreadyExist,isAnExistingUser} = require('../Middleware
 router.post('/signup',validateBody(userRegisterSchema),userAlreadyExist,passwordMatch, UsersControllers.signUpUser)
 router.post('/login',validateBody(userLoginSchema), isAnExistingUser,UsersControllers.logInUser)
 router.get('/user/:userId',UsersControllers.getUserById)
-router.put('/user/:userId',validateBody(userProfileSettingsSchema),passwordMatch,UsersControllers.changeProfileSettings)
+router.put('/user/:userId',validateBody(userProfileSettingsSchema),UsersControllers.changeProfileSettings)
 
 module.exports = router

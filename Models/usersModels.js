@@ -1,70 +1,67 @@
 const fs = require('fs')
 const path = require('path')
 const bcrypt = require('bcrypt');
+const dbConnection = require('../Data/knex')
+const compareBcrypt = require('../Middleware/usersMiddleware')
 
 const pathToUsersDb = path.resolve(__dirname, '../Database/users.json')
 
 function getAllUsersModel(){
     try{
-        const getUsers = fs.readFileSync(pathToUsersDb,'utf8')
-        return JSON.parse(getUsers)
+        const getUsers = dbConnection.from('users')
+        return getUsers
     }catch(err){
         console.log(err)
     }
 }
-function getUsersByEmailModel(email){
+async function getUsersByEmailModel(email){
     try{
-        const usersByEmail = getAllUsersModel()
-        const user = usersByEmail.find(user => user.email === email)
+        const user = await dbConnection.select().from('users').where({email:email})
+        console.log(user)
         return user
+        
     }catch(err){
         console.log(err)
     }
     
 }
 
-function addUserModel(registerUser){
+async function addUserModel(registerUser){
     try{
-    const allUsers = getAllUsersModel()
-    allUsers.push(registerUser)
-    fs.writeFileSync(pathToUsersDb,JSON.stringify(allUsers))
+    const addUser = await dbConnection.from('users').insert(registerUser)
+    return addUser
     }catch(err){
         console.log(err)
     }
 }
 
-    function logInUserModel(email,password){
+  async function logInUserModel(email,password){
     try{
-        const userByEmailAndPassword = getAllUsersModel()
-        const userExist = userByEmailAndPassword.find(user => user.email === email)
-        //console.log(password,userExist)
-        const isValidUser = bcrypt.compareSync(password,userExist.password)
-        if(isValidUser){
-            return userExist
-        }
-        
+        const userExists = await dbConnection('users').first().where({email})
+        /*const userByEmailAndPassword = getAllUsersModel()
+        const userExist = userByEmailAndPassword.find(user => user.email === email)*/
+        return userExists
+        /*if(isValidUser){
+            
+        }*/
     }catch(err){
         console.log(err)
     }
 }
-    function getUserByIdModel(id){
+   async function getUserByIdModel(id){
         try{
-            const userById = getAllUsersModel()
-            const userId = userById.find(userId =>userId.id === id)
-            return userId
+            const userById = await dbConnection('users').where({id_user:id})
+            //const userId = userById.find(userId =>userId.id === id)
+            console.log(userById)
+            return userById
         }catch(err){
             console.log(err)
         }
          }
-    function changeUserSettingsModel(id,userChange){
+  async function changeUserSettingsModel(id,userChange){
         try{
-            const userById = getAllUsersModel()
-            const userId = userById.find(userId =>userId.id === id)
-            const usersTableChanged = [userChange,...userById]
-            if(userId){
-                fs.writeFileSync(pathToUsersDb,JSON.stringify(usersTableChanged))
-            }
-                
+            const userToChange = await dbConnection('users').where({id_user:id}).update({first_name:userChange.first_name,last_name:userChange.last_name,phone_number:userChange.phone_number,email:userChange.email,password:userChange.password,bio:userChange.bio})
+             return userToChange   
             
         }catch(err){
             console.log(err)
