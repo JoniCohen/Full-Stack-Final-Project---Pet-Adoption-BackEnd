@@ -4,8 +4,6 @@ const userProfileSettingsSchema = {
       firstName: {type: "string"},
       lastName: {type: "string"},
       phoneNumber: {type: "string", minLength:10, maxLength:10},
-      email: {type: "string"},
-      password: {type: "string", minLength:3, maxLength: 10},
       bio: {type: "string"}
     },
     required: [],

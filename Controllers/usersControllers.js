@@ -50,10 +50,9 @@ async function getUserById(req,res){
 async function changeProfileSettings(req,res){
     try{
         const {userId} = req.params
-        const {firstName,lastName,phoneNumber,email,password,bio} = req.body
-        const password_hash = compareBcrypt(password,3)
-        const userToChangeById={id_user:userId,first_name:firstName,last_name:lastName,phone_number:phoneNumber,email:email,password:password_hash,bio:bio}
-        const userChanged = changeUserSettingsModel(userId,userToChangeById)
+        const {firstName,lastName,phoneNumber,bio} = req.body
+        const userToChangeById={first_name:firstName,last_name:lastName,phone_number:phoneNumber,bio:bio}
+        const userChanged = await changeUserSettingsModel(userId,userToChangeById)
         
         res.send(userChanged)
     }catch(err){    

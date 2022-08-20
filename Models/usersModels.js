@@ -60,7 +60,7 @@ async function addUserModel(registerUser){
          }
   async function changeUserSettingsModel(id,userChange){
         try{
-            const userToChange = await dbConnection('users').where({id_user:id}).update({first_name:userChange.first_name,last_name:userChange.last_name,phone_number:userChange.phone_number,email:userChange.email,password:userChange.password,bio:userChange.bio})
+            const userToChange = await dbConnection('users').where({id_user:id}).update(userChange)
              return userToChange   
             
         }catch(err){
