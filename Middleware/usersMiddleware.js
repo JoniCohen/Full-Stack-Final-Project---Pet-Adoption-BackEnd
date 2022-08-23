@@ -1,9 +1,5 @@
-const {getUsersByEmailModel,logInUserModel} = require('../Models/usersModels')
-const fs = require('fs')
-const path = require('path');
+const {getUserByEmailModel} = require('../Models/usersModels')
 const bcrypt = require('bcrypt');
-const dbConnection = require('../Data/knex')
-const pathToUsersDb = path.resolve(__dirname, '../Database/users.json')
 
 
 function passwordMatch (req,res,next){
@@ -16,38 +12,41 @@ function passwordMatch (req,res,next){
 
 
 async function userAlreadyExist (req,res,next){
-    const user = await getUsersByEmailModel(req.body.email)
-    console.log(user)
-    if(user.length>0){
+    const user = await getUserByEmailModel()
+    if(user){
         res.status(400).send('User already exists')
         return
     }
     next();
 }
 async function isAnExistingUser (req,res,next){
-    const userExists = await dbConnection('users').first().where({email:req.body.email})
-    if(!userExists){
-        res.status(400).send('Incorrect Email and/or Password!')
+    const user = await getUserByEmailModel(req.body.email)
+    if(user){
+        req.body.user = user
+        next()
+        return
     }else{
-        const isValidUser = bcrypt.compareSync(req.body.password,userExists.password)
-        if(!isValidUser){
-            res.status(400).send('Invalid Password!')
-        } else{
-            next()
-        }
+        res.status(400).send('The user does not exist')
     }
+    
 }
 
-/*function compareBcrypt(password,password_hash){
-    return new Promise(function(resolve,reject){
-        bcrypt.compare(password,password_hash,function(err,res){
-            if(err){
-                reject(err)
-            }else{
-                resolve(res)
-            }
-        })
+async function verifyPassword(req,res,next){
+    const {user} = req.body
+    bcrypt.compare(req.body.password,user.password,(err,result)=>{
+        if(err){
+            res.status(500).send(err.message)
+            console.log(err.message)
+            return
+        }
+        if(result){
+            next()
+            return
+        }else{
+            res.status(400).send('Invalid Password')
+        }
     })
-}*/
+}
 
-module.exports = {userAlreadyExist,passwordMatch,isAnExistingUser}
+
+module.exports = {userAlreadyExist,passwordMatch,isAnExistingUser,verifyPassword}

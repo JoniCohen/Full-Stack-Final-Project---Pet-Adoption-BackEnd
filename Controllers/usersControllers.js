@@ -1,8 +1,7 @@
-const fs = require('fs')
-const path = require('path')
 const {addUserModel,logInUserModel,getUserByIdModel,changeUserSettingsModel} = require('../Models/usersModels')
 const bcrypt = require('bcrypt');
-const compareBcrypt = require('../Middleware/usersMiddleware')
+const jwt = require('jsonwebtoken');
+require('dotenv').config()
 
 async function signUpUser(req,res){
 try{
@@ -27,11 +26,10 @@ try{
 
 async function logInUser(req,res){
     try{
-        const email = req.body.email
-        const password = req.body.password
-        const user = await logInUserModel(email,password)
-        console.log(user)
-        res.send(user)
+        const {user} = req.body
+        const token = jwt.sign({id:user.id_user},process.env.TOKEN_SECRET,{expiresIn:'5h'})
+        res.cookie('Token',token,{maxAge: 2 * (60 * 60 * 24)})
+        res.send({name: user.first_name,token:token,id:user.id_user})
     }catch(err){
         res.status(400).send(err.message)
     }
@@ -40,7 +38,6 @@ async function logInUser(req,res){
 async function getUserById(req,res){
     try{
         const usersById = await getUserByIdModel(req.params.userId)
-        console.log(req.params.userId)
         res.send(usersById)
     }catch(err){
         res.status(500).send(err.message)

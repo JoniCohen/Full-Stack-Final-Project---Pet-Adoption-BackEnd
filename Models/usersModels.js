@@ -1,25 +1,20 @@
-const fs = require('fs')
-const path = require('path')
-const bcrypt = require('bcrypt');
 const dbConnection = require('../Data/knex')
-const compareBcrypt = require('../Middleware/usersMiddleware')
 
-const pathToUsersDb = path.resolve(__dirname, '../Database/users.json')
 
-function getAllUsersModel(){
+
+async function getAllUsersModel(){
     try{
-        const getUsers = dbConnection.from('users')
+        const getUsers = await dbConnection.from('users')
         return getUsers
     }catch(err){
         console.log(err)
     }
 }
-async function getUsersByEmailModel(email){
+async function getUserByEmailModel(email){
     try{
-        const user = await dbConnection.select().from('users').where({email:email})
-        console.log(user)
-        return user
-        
+        const userEmail = await dbConnection('users').where({email:email}).first()
+        console.log(userEmail)
+        return userEmail
     }catch(err){
         console.log(err)
     }
@@ -35,15 +30,12 @@ async function addUserModel(registerUser){
     }
 }
 
-  async function logInUserModel(email,password){
+  async function logInUserModel(email){
     try{
-        const userExists = await dbConnection('users').first().where({email})
-        /*const userByEmailAndPassword = getAllUsersModel()
-        const userExist = userByEmailAndPassword.find(user => user.email === email)*/
+        const userExists = await dbConnection('users').where({email:email})
+        
         return userExists
-        /*if(isValidUser){
-            
-        }*/
+        
     }catch(err){
         console.log(err)
     }
@@ -51,7 +43,6 @@ async function addUserModel(registerUser){
    async function getUserByIdModel(id){
         try{
             const userById = await dbConnection('users').where({id_user:id})
-            //const userId = userById.find(userId =>userId.id === id)
             console.log(userById)
             return userById
         }catch(err){
@@ -69,4 +60,4 @@ async function addUserModel(registerUser){
     }
 
 
-module.exports = {getAllUsersModel, addUserModel,getUsersByEmailModel,logInUserModel,getUserByIdModel,changeUserSettingsModel}
+module.exports = {getAllUsersModel, addUserModel,getUserByEmailModel,getUserByIdModel,changeUserSettingsModel,logInUserModel}
