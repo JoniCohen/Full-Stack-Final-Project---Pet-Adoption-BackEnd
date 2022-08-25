@@ -1,4 +1,6 @@
-const {getColorOfPets,getTypeOfPets,getBreedOfPets} = require('../Models/petsModels')
+const {getColorOfPets,getTypeOfPets,getBreedOfPets,addPetsModel} = require('../Models/petsModels')
+const dbConnection = require('../Data/knex')
+
 
 
 async function setColorOfPets(req,res){
@@ -28,6 +30,19 @@ async function setBreedOfPets(req,res){
     }
     
 }
+async function addPets(req,res){
+    try{
+        console.log(req.body)
+        const {namePet,imagePet,heightPet,weightPet,bioPet,dietaryPet,hypoallergenicPet,colorsPet,typesPet,breedsPet} = req.body
+        /*const idColor = JSON.stringify(dbConnection.select('id_color_pet').from('color_of_pet').where({color_pet:colorsPet}))
+        const addPet={name_pet:namePet,image_pet:imagePet,height_pet:heightPet,weight_pet:weightPet,bio_pet:bioPet,dietary_restrictions_pet:dietaryPet,hypoallergenic_pet:hypoallergenicPet,id_color_pet:colorsPet,id_type_pet:typesPet,id_breed_pet:breedsPet}
+        console.log(addPet)*/
+        const addPet = await addPetsModel(req.body)
+        res.send(addPet)
+    }catch(err){
+        res.status(500).send(err)
+    }
+    
+}
 
-
-module.exports = {setColorOfPets,setTypeOfPets,setBreedOfPets}
+module.exports = {setColorOfPets,setTypeOfPets,setBreedOfPets,addPets}

@@ -9,6 +9,7 @@ const dbConnection = require('./Data/knex')
 const  cookieparser = require('cookie-parser');
 app.use(cookieparser());
 
+app.use('/Images',express.static('Images'))
 app.use(express.json())
 app.use(cors({origin:'http://localhost:3000',credentials:true}))
 
