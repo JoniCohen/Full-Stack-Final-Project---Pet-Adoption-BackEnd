@@ -57,5 +57,20 @@ async function changeProfileSettings(req,res){
         res.status(500).send(err.message)
     }
 }
+async function logOut(req,res){
+    try{
+        console.log(req.cookies)
+        if(req.cookies.Token){
+            
+            res.clearCookie("Token")
+            res.send({ok:true})
+        }else{
+            throw new Error("No cookie to clear")
+        }
+    }catch(err){
+        res.status(500).send(err.message)
+        console.log(err)
+    }
+}
 
-module.exports = {signUpUser,logInUser,getUserById,changeProfileSettings}
+module.exports = {signUpUser,logInUser,getUserById,changeProfileSettings, logOut}
