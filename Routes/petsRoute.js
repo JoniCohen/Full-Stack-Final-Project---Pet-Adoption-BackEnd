@@ -8,6 +8,6 @@ router.get('/color',PetsControllers.setColorOfPets)
 router.get('/type',PetsControllers.setTypeOfPets)
 router.get('/breed',PetsControllers.setBreedOfPets)
 router.post('/addpet',updload.single('imagePet'),imageURL,PetsControllers.addPets)
-
+router.get('/',PetsControllers.getPets)
 
 module.exports = router

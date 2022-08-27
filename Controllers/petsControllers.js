@@ -1,4 +1,4 @@
-const {getColorOfPets,getTypeOfPets,getBreedOfPets,addPetsModel} = require('../Models/petsModels')
+const {getColorOfPets,getTypeOfPets,getBreedOfPets,addPetsModel,getAllPetsModel} = require('../Models/petsModels')
 const dbConnection = require('../Data/knex')
 
 
@@ -44,5 +44,16 @@ async function addPets(req,res){
     }
     
 }
+    async function getPets(req,res){
+        try{
+            const pets = await getAllPetsModel()
+            console.log(pets)
+            res.send(pets)
+        }catch(err){
+            res.status(500).send(err)
+            console.log(err)
+        }
+        
+    }
 
-module.exports = {setColorOfPets,setTypeOfPets,setBreedOfPets,addPets}
+module.exports = {setColorOfPets,setTypeOfPets,setBreedOfPets,addPets,getPets}
