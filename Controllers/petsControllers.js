@@ -1,4 +1,4 @@
-const {getColorOfPets,getTypeOfPets,getBreedOfPets,addPetsModel,getAllPetsModel} = require('../Models/petsModels')
+const {getColorOfPets,getTypeOfPets,getBreedOfPets,addPetsModel,getAllPetsModel,getPetByIdModel,getPetByUserIdModel,adoptPetModel,operationsModel} = require('../Models/petsModels')
 const dbConnection = require('../Data/knex')
 
 
@@ -34,9 +34,6 @@ async function addPets(req,res){
     try{
         console.log(req.body)
         const {namePet,imagePet,heightPet,weightPet,bioPet,dietaryPet,hypoallergenicPet,colorsPet,typesPet,breedsPet} = req.body
-        /*const idColor = JSON.stringify(dbConnection.select('id_color_pet').from('color_of_pet').where({color_pet:colorsPet}))
-        const addPet={name_pet:namePet,image_pet:imagePet,height_pet:heightPet,weight_pet:weightPet,bio_pet:bioPet,dietary_restrictions_pet:dietaryPet,hypoallergenic_pet:hypoallergenicPet,id_color_pet:colorsPet,id_type_pet:typesPet,id_breed_pet:breedsPet}
-        console.log(addPet)*/
         const addPet = await addPetsModel(req.body)
         res.send(addPet)
     }catch(err){
@@ -56,4 +53,43 @@ async function addPets(req,res){
         
     }
 
-module.exports = {setColorOfPets,setTypeOfPets,setBreedOfPets,addPets,getPets}
+    async function getPetById(req,res){
+        try{
+            const petById = await getPetByIdModel(req.params.id_pet)
+            res.send(petById)
+        }catch(err){
+            res.status(500).send(err)
+            console.log(err)
+        }
+    }
+
+    async function getPetByUserId(req,res){
+        try{
+            const petByUserId = await getPetByUserIdModel(req.params.id_user)
+            res.send(petByUserId)
+        }catch(err){
+            res.status(500).send(err)
+            console.log(err)
+        }
+    }
+    async function operations(req,res){
+        try{
+            const {newStatus,newUser,petId} = req.body
+            const operations = await operationsModel(newStatus,newUser,petId)
+        }catch(err){
+            res.status(500).send(err)
+            console.log(err)
+        }
+    }
+    async function adoptPet(req,res){
+        try{
+            const {newStatus,newUser,petId} = req.body
+            const adoptAPet = await adoptPetModel(newStatus,newUser,petId)
+            res.send(adoptAPet)
+        }catch(err){
+            res.status(500).send(err)
+            console.log(err)
+        }
+    }
+
+module.exports = {setColorOfPets,setTypeOfPets,setBreedOfPets,addPets,getPets,getPetById,getPetByUserId,adoptPet,operations}
