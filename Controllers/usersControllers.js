@@ -1,4 +1,4 @@
-const {addUserModel,logInUserModel,getUserByIdModel,changeUserSettingsModel} = require('../Models/usersModels')
+const {addUserModel,logInUserModel,getUserByIdModel,changeUserSettingsModel, getAllUsersModel,changeAdminModel} = require('../Models/usersModels')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config()
@@ -29,7 +29,7 @@ async function logInUser(req,res){
         const {user} = req.body
         const token = jwt.sign({id:user.id_user},process.env.TOKEN_SECRET,{expiresIn:'5h'})
         res.cookie('Token',token,{maxAge: 2 * (60 * 60 * 24)})
-        res.send({name: user.first_name,token:token,id:user.id_user})
+        res.send({name: user.first_name,token:token,id:user.id_user,is_admin:user.is_admin})
     }catch(err){
         res.status(400).send(err.message)
     }
@@ -72,5 +72,25 @@ async function logOut(req,res){
         console.log(err)
     }
 }
+async function getAllUsers(req,res){
+    try{
+        const allUsers = await getAllUsersModel()
+        res.send(allUsers) 
+    }catch(err){
+        res.status(500).send(err.message)
+        console.log(err)
+    }
+}
+async function changeAdmin(req,res){
+    try{
+        const {id_user,is_admin} = req.body
+        const adminChanged = await changeAdminModel(id_user,is_admin)
+        res.send({response:adminChanged})
+    }catch(err){
+        res.status(500).send(err.message)
+        console.log(err)
+    }
+    
+}
 
-module.exports = {signUpUser,logInUser,getUserById,changeProfileSettings, logOut}
+module.exports = {signUpUser,logInUser,getUserById,changeProfileSettings, logOut,getAllUsers,changeAdmin}

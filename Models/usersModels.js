@@ -58,6 +58,21 @@ async function addUserModel(registerUser){
             console.log(err)
         }
     }
+    function adminToBoolean(isAdmin){
+        if(isAdmin = 1 ){
+            return 1
+        }else if(isAdmin = 0){
+            return 0
+        }
+    }
+    
+    async function changeAdminModel(id,is_admin){
+        try{
+            const changeAdmin = await dbConnection('users').where({id_user:id}).update({is_admin:adminToBoolean(is_admin)})
+            return changeAdmin
+        }catch(err){
+            console.log(err)
+        }
+    }
 
-
-module.exports = {getAllUsersModel, addUserModel,getUserByEmailModel,getUserByIdModel,changeUserSettingsModel,logInUserModel}
+module.exports = {getAllUsersModel, addUserModel,getUserByEmailModel,getUserByIdModel,changeUserSettingsModel,logInUserModel,changeAdminModel}

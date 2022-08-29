@@ -13,5 +13,7 @@ router.post('/login',validateBody(userLoginSchema), isAnExistingUser,verifyPassw
 router.get('/user/:userId',UsersControllers.getUserById)
 router.put('/user/:userId',validateBody(userProfileSettingsSchema),UsersControllers.changeProfileSettings)
 router.get('/logout',UsersControllers.logOut)
+router.get('/',UsersControllers.getAllUsers)
+router.put('/isadmin',UsersControllers.changeAdmin)
 
 module.exports = router

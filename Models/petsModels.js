@@ -82,5 +82,48 @@ async function addPetsModel(pet){
             console.log(err)
         }
     }
+    async function fosterPetModel(newStatus,newUser,petId){
+        try{
+            const fosterPet = await dbConnection('pets').where({'id_pet':petId}).update({'id_status_pet':newStatus,'id_user':newUser})
+            return fosterPet
+        }catch(err){
+            console.log(err)
+        }
+        
+    }
+    async function returnPetModel(newStatus,newUser,petId){
+        try{
+            const returnPet = await dbConnection('pets').where({'id_pet':petId}).update({'id_status_pet':newStatus,'id_user':newUser})
+            return returnPet
+        }catch(err){
+            console.log(err)
+        }
+        
+    }
+    async function savePetModel(idUser,idPet){
+        try{    
+            const savePet = await dbConnection.from('saved_pets').insert({id_user:idUser,id_pet:idPet})
+            return savePet
+        }catch(err){
+            console.log(err)
+        }
+    }
+    async function unsavePetModel(idUser,idPet){
+        try{    
+            const unsavePet = await dbConnection.from('saved_pets').where({id_user:idUser,id_pet:idPet}).del()
+            return unsavePet
+        }catch(err){
+            console.log(err)
+        }
+    }
+    async function getSavedPetsModel(idUser){
+        try{
+            const petsSaved = await dbConnection('saved_pets').join('pets','saved_pets.id_pet','=','pets.id_pet').select('pets.name_pet','image_pet').where({'saved_pets.id_user':idUser})
+            return petsSaved
+        }catch(err){
+            console.log(err)
+        }
+    }
 
-module.exports = {getColorOfPets,getTypeOfPets,getBreedOfPets,addPetsModel,getAllPetsModel,getPetByIdModel,getPetByUserIdModel,adoptPetModel,operationsModel}
+
+module.exports = {getColorOfPets,getTypeOfPets,getBreedOfPets,addPetsModel,getAllPetsModel,getPetByIdModel,getPetByUserIdModel,adoptPetModel,operationsModel,fosterPetModel,returnPetModel,savePetModel,unsavePetModel,getSavedPetsModel}
