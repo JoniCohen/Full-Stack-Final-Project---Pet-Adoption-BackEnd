@@ -43,7 +43,6 @@ async function addUserModel(registerUser){
    async function getUserByIdModel(id){
         try{
             const userById = await dbConnection('users').where({id_user:id})
-            console.log(userById)
             return userById
         }catch(err){
             console.log(err)
@@ -59,9 +58,9 @@ async function addUserModel(registerUser){
         }
     }
     function adminToBoolean(isAdmin){
-        if(isAdmin = 1 ){
+        if(isAdmin === 1 ){
             return 1
-        }else if(isAdmin = 0){
+        }else if(isAdmin === 0){
             return 0
         }
     }

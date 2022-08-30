@@ -118,12 +118,22 @@ async function addPetsModel(pet){
     }
     async function getSavedPetsModel(idUser){
         try{
-            const petsSaved = await dbConnection('saved_pets').join('pets','saved_pets.id_pet','=','pets.id_pet').select('pets.name_pet','image_pet').where({'saved_pets.id_user':idUser})
+            const petsSaved = await dbConnection('saved_pets').join('pets','saved_pets.id_pet','=','pets.id_pet').join('status_pet','pets.id_status_pet','=','status_pet.id_status_pet').select('pets.name_pet','pets.image_pet','pets.id_pet','status_pet.status_pet').where({'saved_pets.id_user':idUser})
             return petsSaved
+        }catch(err){
+            console.log(err)
+        }
+    }
+    async function getPetsByTypeModel(type){
+        try{        
+            const typePet = await dbConnection('pets').join('status_pet','pets.id_status_pet','=','status_pet.id_status_pet').join('color_of_pet','pets.id_color_pet','=','color_of_pet.id_color_pet').join('breed_of_pet','pets.id_breed_pet','=','breed_of_pet.id_breed_of_pet').join('type_of_pet','breed_of_pet.id_type_pet','=','type_of_pet.id_type_pet').join('users','pets.id_user','=','users.id_user').select('pets.id_pet','pets.name_pet','pets.image_pet','pets.height_pet','pets.weight_pet','pets.bio_pet','pets.hypoallergenic_pet','pets.dietary_restrictions_pet','status_pet.status_pet','color_of_pet.color_pet','breed_of_pet.breed_of_pet','type_of_pet.type_pet').where({'type_of_pet.type_pet':type,'pets.id_status_pet':1})
+            return typePet
         }catch(err){
             console.log(err)
         }
     }
 
 
-module.exports = {getColorOfPets,getTypeOfPets,getBreedOfPets,addPetsModel,getAllPetsModel,getPetByIdModel,getPetByUserIdModel,adoptPetModel,operationsModel,fosterPetModel,returnPetModel,savePetModel,unsavePetModel,getSavedPetsModel}
+
+
+module.exports = {getColorOfPets,getTypeOfPets,getBreedOfPets,addPetsModel,getAllPetsModel,getPetByIdModel,getPetByUserIdModel,adoptPetModel,operationsModel,fosterPetModel,returnPetModel,savePetModel,unsavePetModel,getSavedPetsModel,getPetsByTypeModel}

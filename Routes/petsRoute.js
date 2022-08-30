@@ -18,7 +18,8 @@ router.put('/adopt',PetsControllers.adoptPet)
 router.put('/foster',PetsControllers.fosterPet)
 router.put('/return',PetsControllers.returnPet)
 router.post('/savepets',PetsControllers.savePet)
-router.delete('/savepets',PetsControllers.unsavePet)
+router.delete('/savepets/:id_user/:id_pet',PetsControllers.unsavePet)
 router.get('/savedpets/:id_user',PetsControllers.getSavedPets)
+router.get('/type/:type',PetsControllers.getPetsByType)
 
 module.exports = router
