@@ -1,4 +1,4 @@
-const {getColorOfPets,getTypeOfPets,getBreedOfPets,addPetsModel,getAllPetsModel,getPetByIdModel,getPetByUserIdModel,adoptPetModel,operationsModel,fosterPetModel,returnPetModel,savePetModel,unsavePetModel,getSavedPetsModel,getPetsByTypeModel} = require('../Models/petsModels')
+const {getColorOfPets,getTypeOfPets,getBreedOfPets,addPetsModel,getAllPetsModel,getPetByIdModel,getPetByUserIdModel,adoptPetModel,operationsModel,fosterPetModel,returnPetModel,savePetModel,unsavePetModel,getSavedPetsModel,searchPetsModel} = require('../Models/petsModels')
 const dbConnection = require('../Data/knex')
 
 
@@ -142,11 +142,11 @@ async function addPets(req,res){
             console.log(err)
         }
     }
-    async function getPetsByType(req,res){
+    async function searchPets(req,res){
         try{
-            const type = req.params.type
-            const petType = await getPetsByTypeModel(type)
-            res.send(petType) 
+            const search = req.query
+            const petsSearched = await searchPetsModel(search)
+            res.send(petsSearched)
         }catch(err){
             res.status(500).send(err)
             console.log(err)
@@ -155,4 +155,4 @@ async function addPets(req,res){
 
 
 
-module.exports = {setColorOfPets,setTypeOfPets,setBreedOfPets,addPets,getPets,getPetById,getPetByUserId,adoptPet,operations,fosterPet,returnPet,savePet,unsavePet,getSavedPets,getPetsByType}
+module.exports = {setColorOfPets,setTypeOfPets,setBreedOfPets,addPets,getPets,getPetById,getPetByUserId,adoptPet,operations,fosterPet,returnPet,savePet,unsavePet,getSavedPets,searchPets}

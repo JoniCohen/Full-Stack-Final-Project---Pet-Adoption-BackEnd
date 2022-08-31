@@ -7,10 +7,10 @@ const addPetsSchema = {
       weightPet: {type: "string"},
       bioPet: {type: "string"},
       dietaryPet: {type: "string"},
-      hypoallergenicPet: {type: "boolean"},
-      colorsPet: {type: "integer"},
-      typesPet: {type: "integer"},
-      breedsPet: {type: "integer"}
+      hypoallergenicPet: {type: "string"},
+      colorsPet: {type: "string"},
+      typesPet: {type: "string"},
+      breedsPet: {type: "string"}
     },
     required: ["namePet","imagePet","heightPet","weightPet","bioPet","dietaryPet","hypoallergenicPet","colorsPet","typesPet","breedsPet"],
     additionalProperties: false

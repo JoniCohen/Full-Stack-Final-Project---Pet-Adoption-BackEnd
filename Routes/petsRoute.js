@@ -4,6 +4,8 @@ const PetsControllers = require('../Controllers/petsControllers')
 const {updload,imageURL} = require('../Middleware/imagesMiddleware')
 const {validateBody} = require('../Middleware/validateBody.js')
 const {addPetsSchema} = require('../Schemas/addPetsSchema')
+const {filterQuery} = require('../Middleware/petsMiddleware')
+const {searchSchema} = require('../Schemas/searchSchema')
 
 
 router.get('/color',PetsControllers.setColorOfPets)
@@ -20,6 +22,6 @@ router.put('/return',PetsControllers.returnPet)
 router.post('/savepets',PetsControllers.savePet)
 router.delete('/savepets/:id_user/:id_pet',PetsControllers.unsavePet)
 router.get('/savedpets/:id_user',PetsControllers.getSavedPets)
-router.get('/type/:type',PetsControllers.getPetsByType)
+router.get('/search',validateBody(searchSchema),filterQuery,PetsControllers.searchPets)
 
 module.exports = router
