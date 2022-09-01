@@ -39,15 +39,7 @@ async function addPetsModel(pet){
     }
     
 }
-    async function getAllPetsModel(){
-        try{
-            const allPets = await dbConnection('pets').join('status_pet','pets.id_status_pet','=','status_pet.id_status_pet').join('color_of_pet','pets.id_color_pet','=','color_of_pet.id_color_pet').join('breed_of_pet','pets.id_breed_pet','=','breed_of_pet.id_breed_of_pet').join('type_of_pet','breed_of_pet.id_type_pet','=','type_of_pet.id_type_pet').join('users','pets.id_user','=','users.id_user').select('pets.id_pet','pets.name_pet','pets.image_pet','pets.height_pet','pets.weight_pet','pets.bio_pet','pets.hypoallergenic_pet','pets.dietary_restrictions_pet','status_pet.status_pet','color_of_pet.color_pet','breed_of_pet.breed_of_pet','type_of_pet.type_pet').where({'pets.id_status_pet':1})
-            return allPets
-        }catch(err){
-            console.log(err)
-        }
-        
-    }
+    
     async function getPetByIdModel(idPet){
         try{
             const petById = await dbConnection('pets').join('status_pet','pets.id_status_pet','=','status_pet.id_status_pet').join('color_of_pet','pets.id_color_pet','=','color_of_pet.id_color_pet').join('breed_of_pet','pets.id_breed_pet','=','breed_of_pet.id_breed_of_pet').join('type_of_pet','breed_of_pet.id_type_pet','=','type_of_pet.id_type_pet').join('users','pets.id_user','=','users.id_user').select('pets.id_pet','pets.name_pet','pets.image_pet','pets.height_pet','pets.weight_pet','pets.bio_pet','pets.hypoallergenic_pet','pets.dietary_restrictions_pet','status_pet.status_pet','color_of_pet.color_pet','breed_of_pet.breed_of_pet','type_of_pet.type_pet').where({'pets.id_pet':idPet})
@@ -126,8 +118,6 @@ async function addPetsModel(pet){
     }
 
     async function searchPetsModel(search){
-        console.log(search)
-        
         try{
             const petsSearched = await dbConnection('pets').join('status_pet','pets.id_status_pet','=','status_pet.id_status_pet').join('color_of_pet','pets.id_color_pet','=','color_of_pet.id_color_pet').join('breed_of_pet','pets.id_breed_pet','=','breed_of_pet.id_breed_of_pet').join('type_of_pet','breed_of_pet.id_type_pet','=','type_of_pet.id_type_pet').join('users','pets.id_user','=','users.id_user').select('pets.id_pet','pets.name_pet','pets.image_pet','pets.height_pet','pets.weight_pet','pets.bio_pet','pets.hypoallergenic_pet','pets.dietary_restrictions_pet','status_pet.status_pet','color_of_pet.color_pet','breed_of_pet.breed_of_pet','type_of_pet.type_pet').where({'pets.id_status_pet':1}).andWhereLike('pets.name_pet',`%${search.name||''}%`).andWhereLike('type_of_pet.type_pet',`%${search.type||''}%`).andWhereLike('color_of_pet.color_pet',`%${search.color||''}%`).andWhereLike('breed_of_pet.breed_of_pet',`%${search.breed||''}%`).whereBetween('pets.height_pet',[search.minHeight||0,search.maxHeight||100]).whereBetween('pets.weight_pet',[search.minWeight||0,search.maxWeight||100]).orderBy('pets.id_pet','asc')
             return petsSearched
@@ -135,8 +125,38 @@ async function addPetsModel(pet){
             console.log(err)
         }
     }
+    async function getPetsViewModel(){
+        try{
+            const petsView = await dbConnection.from('pets_view').orderBy('PetID')
+            return petsView
+        }catch(err){
+            console.log(err)
+        }
+    }
+    async function getHistoricalOperationsViewModel(){
+        try{
+            const historicalOperationsView = await dbConnection.from('histotical_operations_view')
+            return historicalOperationsView
+        }catch(err){
+            console.log(err)
+        }
+    }
+    async function deletePetModel(pet){
+        try{
+            const petDeleted = await dbConnection.from('pets').where({id_pet:pet.id_pet}).del()
+            return petDeleted
+        }catch(err){
+            console.log(err)
+        }
+    }
+    async function getPetsByUserModel(idUser){
+        try{
+            const petsOfuser = await dbConnection.from('users').leftJoin('pets','users.id_user','=','pets.id_user').select('pets.name_pet','users.first_name','users.last_name','users.email','users.phone_number').where({'users.id_user':idUser})
+            return petsOfuser
+        }catch(err){
+            console.log(err)
+        }
+    }
 
 
-
-
-module.exports = {getColorOfPets,getTypeOfPets,getBreedOfPets,addPetsModel,getAllPetsModel,getPetByIdModel,getPetByUserIdModel,adoptPetModel,operationsModel,fosterPetModel,returnPetModel,savePetModel,unsavePetModel,getSavedPetsModel,searchPetsModel}
+module.exports = {getColorOfPets,getTypeOfPets,getBreedOfPets,addPetsModel,getPetByIdModel,getPetByUserIdModel,adoptPetModel,operationsModel,fosterPetModel,returnPetModel,savePetModel,unsavePetModel,getSavedPetsModel,searchPetsModel,getPetsViewModel,getHistoricalOperationsViewModel,deletePetModel,getPetsByUserModel}

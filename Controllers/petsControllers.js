@@ -1,4 +1,4 @@
-const {getColorOfPets,getTypeOfPets,getBreedOfPets,addPetsModel,getAllPetsModel,getPetByIdModel,getPetByUserIdModel,adoptPetModel,operationsModel,fosterPetModel,returnPetModel,savePetModel,unsavePetModel,getSavedPetsModel,searchPetsModel} = require('../Models/petsModels')
+const {getColorOfPets,getTypeOfPets,getBreedOfPets,addPetsModel,getPetByIdModel,getPetByUserIdModel,adoptPetModel,operationsModel,fosterPetModel,returnPetModel,savePetModel,unsavePetModel,getSavedPetsModel,searchPetsModel,getPetsViewModel,getHistoricalOperationsViewModel,deletePetModel,getPetsByUserModel} = require('../Models/petsModels')
 const dbConnection = require('../Data/knex')
 
 
@@ -32,7 +32,6 @@ async function setBreedOfPets(req,res){
 }
 async function addPets(req,res){
     try{
-        console.log(req.body)
         const {namePet,imagePet,heightPet,weightPet,bioPet,dietaryPet,hypoallergenicPet,colorsPet,typesPet,breedsPet} = req.body
         const addPet = await addPetsModel(req.body)
         res.send(addPet)
@@ -41,18 +40,6 @@ async function addPets(req,res){
     }
     
 }
-    async function getPets(req,res){
-        try{
-            const pets = await getAllPetsModel()
-            console.log(pets)
-            res.send(pets)
-        }catch(err){
-            res.status(500).send(err)
-            console.log(err)
-        }
-        
-    }
-
     async function getPetById(req,res){
         try{
             const petById = await getPetByIdModel(req.params.id_pet)
@@ -152,7 +139,44 @@ async function addPets(req,res){
             console.log(err)
         }
     }
+    async function getPetsView(req,res){
+        try{
+            const petsView = await getPetsViewModel()
+            res.send(petsView)
+        }catch(err){
+            res.status(500).send(err)
+            console.log(err)
+        }
+    }
+    async function getHistoricalOperationsView(req,res){
+        try{
+            const historicalOperationsView = await getHistoricalOperationsViewModel()
+            res.send(historicalOperationsView)
+        }catch(err){
+            res.status(500).send(err)
+            console.log(err)
+        }
+    }
+    async function deletePet(req,res){
+        try{
+            const id_pet = req.params
+            const petToDelete = await deletePetModel(id_pet)
+            res.send({response:petToDelete})
+        }catch(err){
+            res.status(500).send(err)
+            console.log(err)
+        }
+    }
+   async function getPetsByUser(req,res){
+    try{
+        const {id_user} = req.params
+        const petsOfUser = await getPetsByUserModel(id_user)
+        res.send(petsOfUser)
+    }catch(err){
+            res.status(500).send(err)
+            console.log(err)
+        }
+   }
 
 
-
-module.exports = {setColorOfPets,setTypeOfPets,setBreedOfPets,addPets,getPets,getPetById,getPetByUserId,adoptPet,operations,fosterPet,returnPet,savePet,unsavePet,getSavedPets,searchPets}
+module.exports = {setColorOfPets,setTypeOfPets,setBreedOfPets,addPets,getPetById,getPetByUserId,adoptPet,operations,fosterPet,returnPet,savePet,unsavePet,getSavedPets,searchPets,getPetsView,getHistoricalOperationsView,deletePet,getPetsByUser}
