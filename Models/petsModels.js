@@ -133,9 +133,9 @@ async function addPetsModel(pet){
             console.log(err)
         }
     }
-    async function getHistoricalOperationsViewModel(){
+    async function getHistoricalOperationsViewModel(search){
         try{
-            const historicalOperationsView = await dbConnection.from('histotical_operations_view')
+            const historicalOperationsView = await dbConnection.from('histotical_operations_view').whereLike('Date',`${search.Date||''}%`).andWhereLike('User',`%${search.User||''}%`).andWhereLike('Pet',`%${search.Pet||''}%`).andWhereLike('StatusTurnedTo',`%${search.StatusTurnedTo||''}%`).andWhereLike('OperationID',`%${search.OperationID||''}%`)
             return historicalOperationsView
         }catch(err){
             console.log(err)

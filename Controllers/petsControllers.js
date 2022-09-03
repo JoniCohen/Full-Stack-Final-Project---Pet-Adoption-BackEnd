@@ -150,7 +150,8 @@ async function addPets(req,res){
     }
     async function getHistoricalOperationsView(req,res){
         try{
-            const historicalOperationsView = await getHistoricalOperationsViewModel()
+            const search = req.query
+            const historicalOperationsView = await getHistoricalOperationsViewModel(search)
             res.send(historicalOperationsView)
         }catch(err){
             res.status(500).send(err)

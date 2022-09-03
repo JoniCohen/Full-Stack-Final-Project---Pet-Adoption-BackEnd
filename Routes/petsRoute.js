@@ -23,7 +23,7 @@ router.delete('/savepets/:id_user/:id_pet',PetsControllers.unsavePet)
 router.get('/savedpets/:id_user',PetsControllers.getSavedPets)
 router.get('/search',validateBody(searchSchema),filterQuery,PetsControllers.searchPets)
 router.get('/viewpets',PetsControllers.getPetsView)
-router.get('/viewhistoricaloperations',PetsControllers.getHistoricalOperationsView)
+router.get('/viewhistoricaloperations',filterQuery,PetsControllers.getHistoricalOperationsView)
 router.delete('/pet/:id_pet',PetsControllers.deletePet)
 router.get('/petsbyuser/:id_user',PetsControllers.getPetsByUser)
 
