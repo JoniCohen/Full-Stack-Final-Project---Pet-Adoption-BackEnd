@@ -6,14 +6,15 @@ const {userRegisterSchema} = require('../Schemas/userRegisterSchema.js')
 const {userLoginSchema} = require('../Schemas/userLogInSchema')
 const {userProfileSettingsSchema} = require('../Schemas/userProfileSettingsSchema')
 const {passwordMatch,userAlreadyExist,isAnExistingUser,verifyPassword} = require('../Middleware/usersMiddleware')
+const {auth} = require('../Middleware/petsMiddleware')
 
 
 router.post('/signup',validateBody(userRegisterSchema),userAlreadyExist,passwordMatch, UsersControllers.signUpUser)
 router.post('/login',validateBody(userLoginSchema), isAnExistingUser,verifyPassword,UsersControllers.logInUser)
-router.get('/user/:userId',UsersControllers.getUserById)
-router.put('/user/:userId',validateBody(userProfileSettingsSchema),UsersControllers.changeProfileSettings)
+router.get('/user/:userId',auth,UsersControllers.getUserById)
+router.put('/user/:userId',validateBody(userProfileSettingsSchema),auth,UsersControllers.changeProfileSettings)
 router.get('/logout',UsersControllers.logOut)
 router.get('/',UsersControllers.getAllUsers)
-router.put('/isadmin',UsersControllers.changeAdmin)
+router.put('/isadmin',auth,UsersControllers.changeAdmin)
 
 module.exports = router

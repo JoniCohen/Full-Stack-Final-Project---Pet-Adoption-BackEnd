@@ -51,7 +51,7 @@ async function changeProfileSettings(req,res){
         const userToChangeById={first_name:firstName,last_name:lastName,phone_number:phoneNumber,bio:bio}
         const userChanged = await changeUserSettingsModel(userId,userToChangeById)
         
-        res.send(userChanged)
+        res.send({response:userChanged})
     }catch(err){    
         console.log(err)
         res.status(500).send(err.message)
@@ -59,9 +59,7 @@ async function changeProfileSettings(req,res){
 }
 async function logOut(req,res){
     try{
-        console.log(req.cookies)
         if(req.cookies.Token){
-            
             res.clearCookie("Token")
             res.send({ok:true})
         }else{
@@ -92,5 +90,6 @@ async function changeAdmin(req,res){
     }
     
 }
+
 
 module.exports = {signUpUser,logInUser,getUserById,changeProfileSettings, logOut,getAllUsers,changeAdmin}

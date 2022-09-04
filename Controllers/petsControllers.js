@@ -31,6 +31,7 @@ async function setBreedOfPets(req,res){
     
 }
 async function addPets(req,res){
+    console.log(req.body)
     try{
         const {namePet,imagePet,heightPet,weightPet,bioPet,dietaryPet,hypoallergenicPet,colorsPet,typesPet,breedsPet} = req.body
         const addPet = await addPetsModel(req.body)
