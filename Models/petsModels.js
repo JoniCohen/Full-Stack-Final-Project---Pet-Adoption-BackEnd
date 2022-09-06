@@ -160,7 +160,7 @@ async function addPetsModel(pet){
     }
     async function editPetsModel(idPet,pet){
         try{
-            const petChanged = await dbConnection.from('pets').update({name_pet:pet.namePet,height_pet:pet.heightPet,weight_pet:pet.weightPet,bio_pet:pet.bioPet,hypoallergenic_pet:hypoallergenic(pet.hypoallergenicPet),dietary_restrictions_pet:pet.dietaryPet,id_status_pet:1,id_color_pet:dbConnection.select('id_color_pet').from('color_of_pet').where({color_pet:pet.colorsPet}),id_breed_pet:dbConnection.select('id_breed_of_pet').from('breed_of_pet').where({breed_of_pet:pet.breedsPet}),id_user:14}).where({'id_pet':idPet})
+            const petChanged = await dbConnection.from('pets').update({name_pet:pet.namePet,height_pet:pet.heightPet,weight_pet:pet.weightPet,bio_pet:pet.bioPet,hypoallergenic_pet:hypoallergenic(pet.hypoallergenicPet),dietary_restrictions_pet:pet.dietaryPet,id_color_pet:dbConnection.select('id_color_pet').from('color_of_pet').where({color_pet:pet.colorsPet}),id_breed_pet:dbConnection.select('id_breed_of_pet').from('breed_of_pet').where({breed_of_pet:pet.breedsPet})}).where({'id_pet':idPet})
             return petChanged
         }catch(err){
             console.log(err)

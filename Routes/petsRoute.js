@@ -7,6 +7,7 @@ const {addPetsSchema} = require('../Schemas/addPetsSchema')
 const {filterQuery,auth} = require('../Middleware/petsMiddleware')
 const {searchSchema} = require('../Schemas/searchSchema')
 const {searchOperationsSchema} = require('../Schemas/searchOperationsSchema')
+const {editPetsSchema} = require('../Schemas/editPetsSchema')
 
 
 router.get('/color',PetsControllers.setColorOfPets)
@@ -27,6 +28,6 @@ router.get('/viewpets',auth,PetsControllers.getPetsView)
 router.get('/viewhistoricaloperations',validateBody(searchOperationsSchema),auth,filterQuery,PetsControllers.getHistoricalOperationsView)
 router.delete('/pet/:id_pet',auth,PetsControllers.deletePet)
 router.get('/petsbyuser/:id_user',auth,PetsControllers.getPetsByUser)
-router.put('/editpet/:id_pet',PetsControllers.editPet)
+router.put('/editpet/:id_pet',validateBody(editPetsSchema),auth,PetsControllers.editPet)
 
 module.exports = router

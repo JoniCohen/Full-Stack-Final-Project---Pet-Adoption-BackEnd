@@ -41,6 +41,7 @@ async function addPets(req,res){
     
 }
     async function getPetById(req,res){
+        
         try{
             const petById = await getPetByIdModel(req.params.id_pet)
             res.send(petById)
@@ -180,8 +181,9 @@ async function addPets(req,res){
    }
    async function editPet(req,res){
     const {id_pet} = req.params
+    const pet = req.body
     try{
-        const editPet = await editPetsModel(id_pet,req.body)
+        const editPet = await editPetsModel(id_pet,pet)
         res.send({response:editPet})
     }catch(err){    
         console.log(err)

@@ -13,7 +13,6 @@ async function getAllUsersModel(){
 async function getUserByEmailModel(email){
     try{
         const userEmail = await dbConnection('users').where({email:email}).first()
-        console.log(userEmail)
         return userEmail
     }catch(err){
         console.log(err)

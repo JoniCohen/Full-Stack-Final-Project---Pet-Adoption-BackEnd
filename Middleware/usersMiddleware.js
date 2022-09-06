@@ -14,7 +14,7 @@ function passwordMatch (req,res,next){
 
 
 async function userAlreadyExist (req,res,next){
-    const user = await getUserByEmailModel()
+    const user = await getUserByEmailModel(req.body.email)
     if(user){
         res.status(400).send('User already exists')
         return
